@@ -49,13 +49,11 @@ public class RoleController {
     }
 
     @DeleteMapping("/deleteRoleById")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteById(@RequestParam(value = "id") Integer id) {
         accountService.deleteRoleById(id);
     }
 
     @DeleteMapping("/deleteRoleByRoleName")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteByName(@RequestParam(value = "roleName") String roleName) {
         accountService.deleteRoleByRoleName(roleName);
     }

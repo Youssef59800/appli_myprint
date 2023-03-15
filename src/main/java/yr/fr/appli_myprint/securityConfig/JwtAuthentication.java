@@ -1,5 +1,6 @@
 package yr.fr.appli_myprint.securityConfig;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@Tag(name = "authenticationWithRefreshToken")
 public class JwtAuthentication {
 
     private final JwtEncoder jwtEncoder;

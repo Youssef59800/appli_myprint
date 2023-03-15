@@ -24,6 +24,10 @@ public interface AccountService {
 
     void removeRoleToUser (Integer id, String roleName);
 
+    void addAdresseToUser (Integer idUser, Integer idAdresse);
+
+    void removeAdresseToUser (Integer idUser, Integer idAdresse);
+
     PersonneEntity loadUserByEmail (String email);
 
     List<PersonneEntity> listUsers();

@@ -5,10 +5,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+import yr.fr.appli_myprint.dto.AuthenticationRequest;
+import yr.fr.appli_myprint.model.PersonneEntity;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +44,7 @@ public class JwtService {
 
             String idToken;
             String jwtAccessToken = generateAccessToken(subject, scope);
-            idToken = ("accessToken: " + "' " + jwtAccessToken + " '" );
+            idToken = (jwtAccessToken);
 
         return idToken;
     }
@@ -56,4 +61,5 @@ public class JwtService {
 
         return  jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
     }
+
 }

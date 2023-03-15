@@ -6,11 +6,15 @@ import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import yr.fr.appli_myprint.dto.AdresseDTO;
+import yr.fr.appli_myprint.dto.AuthenticationRequest;
 import yr.fr.appli_myprint.dto.CustomerDTO;
+import yr.fr.appli_myprint.mapper.AdresseDTOMapper;
 import yr.fr.appli_myprint.model.PersonneEntity;
+import yr.fr.appli_myprint.securityConfig.JwtService;
 import yr.fr.appli_myprint.service.AccountService;
+import yr.fr.appli_myprint.service.AdresseService;
 
 import java.util.List;
 
@@ -21,6 +25,7 @@ import java.util.List;
 public class UserController {
 
     private final AccountService accountService;
+    private final JwtService jwtService;
 
     @GetMapping("/usersDTO")
     public List<CustomerDTO> getUsersDTO() {
@@ -65,13 +70,22 @@ public class UserController {
         accountService.removeRoleToUser(id, roleName);
     }
 
+    @PostMapping("/addAdresseToUser")
+    public void addAdresseToUser(@RequestParam(value = "idUser") Integer idUser, @RequestParam(value = "idAdresse") Integer idAdresse) {
+        accountService.addAdresseToUser(idUser, idAdresse);
+    }
+
+    @PostMapping("/removeAdresseToUser")
+    public void removeAdresseToUser(@RequestParam(value = "idUser") Integer idUser, @RequestParam(value = "idAdresse") Integer idAdresse) {
+        accountService.removeAdresseToUser(idUser, idAdresse);
+    }
+
     @DeleteMapping("/deleteUserByEmail")
     public void deleteByName(@PathParam(value = "email") String email) {
         accountService.deleteUserByEmail(email);
     }
 
     @DeleteMapping("/deleteUserById")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteById(@RequestParam(value = "id") Integer id) {
         accountService.deleteUserById(id);
     }
@@ -93,18 +107,11 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-//    @PostMapping("/register")
-//    public Status registerUser(@Valid @RequestBody PersonneEntity newUser) {
-//        List<PersonneEntity> users = accountService.listUsers();
-//        for (PersonneEntity user : users) {
-//            if ((user.getEmail()).equals(newUser.getEmail())) {
-//                return Status.USER_ALREADY_EXISTS;
-//            } else if ((newUser.getEmail()) == null || (newUser.getPassword()) == null) {
-//                return Status.FAILURE;
-//            }
-//        }
-//        accountService.addNewUser(newUser);
-//        return Status.SUCCESS;
-//    }
+    @PostMapping("/authenticate")
+    public ResponseEntity<String> authenticate(@RequestBody PersonneEntity user) {
+        return ResponseEntity.ok(jwtService.jwtToken(user.getEmail(), user.getPassword()));
+    }
+
+
 }
 
